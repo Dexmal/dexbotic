@@ -181,4 +181,5 @@ dexbotic/data/data_source/*.py
 !dexbotic/data/data_source/example.py
 !dexbotic/data/data_source/__init__.py
 !dexbotic/data/data_source/register.py
+!dexbotic/data/data_source/dm0vl_midtrain_official.py
 dexbotic/norm_assets
