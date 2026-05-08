@@ -59,9 +59,9 @@ The output structure should look like this:
 
 ```text
 so101_dexdata/
-├── dexdata_jsonl/
+├── jsonl/
 │   └── push_button/episode_00000.jsonl
-└── videos/
+└── video/
     └── push_button/episode_00000_front.mp4
 ```
 
@@ -80,8 +80,8 @@ from dexbotic.data.data_source.register import register_dataset
 
 SO101_DATASET = {
     "push_button": {
-        "data_path_prefix": "./dexbotic/so101_dexdata/videos/push_button",
-        "annotations": "./so101_dexdata/dexdata_jsonl/push_button",
+        "data_path_prefix": "./dexbotic/so101_dexdata/video/push_button",
+        "annotations": "./so101_dexdata/jsonl/push_button",
         "frequency": 1,
     },
 }

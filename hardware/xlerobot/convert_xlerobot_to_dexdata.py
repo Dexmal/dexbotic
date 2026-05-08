@@ -166,7 +166,7 @@ def main(lerobot_dir: str, output_dir: str) -> None:
 
     # 2. Prepare Output Paths
     output_jsonl_dir = os.path.join(output_dir, "jsonl", task_name)
-    output_video_dir = os.path.join(output_dir, "videos", task_name)
+    output_video_dir = os.path.join(output_dir, "video", task_name)
     os.makedirs(output_jsonl_dir, exist_ok=True)
     os.makedirs(output_video_dir, exist_ok=True)
 

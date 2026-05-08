@@ -96,7 +96,7 @@ xlerobot_dexdata/
 │       ├── episode_00000.jsonl
 │       ├── episode_00001.jsonl
 │       └── ...
-└── videos/
+└── video/
     └── <task_name>/
         ├── episode_00000_head.mp4
         ├── episode_00000_wrist_left.mp4
@@ -124,7 +124,7 @@ from dexbotic.data.data_source.register import register_dataset
 
 XLEROBOT_DATASET = {
     "<task_name>": {
-        "data_path_prefix": "/path/to/dexdata/videos",
+        "data_path_prefix": "/path/to/dexdata/video",
         "annotations": "/path/to/dexdata/jsonl/<task_name>",
         "frequency": 1,
     },

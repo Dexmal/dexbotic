@@ -288,8 +288,8 @@ def load_rlds_dataset(
         dataset_name (str): Dataset name, e.g., 'libero_10_no_noops'
         split (str): Data split, options include 'train', 'validation', 'test', default is 'train'
         data_dir (str): Data storage directory, uses default if None
-        output_dir (str): Root directory for output files (videos and JSONs), default is './output'
-        frame_rate (int): Frame rate for output videos, default is 10
+        output_dir (str): Root directory for output files (video and JSONL), default is './output'
+        frame_rate (int): Frame rate for output video, default is 10
         verbose (bool): Enable verbose output, default is False
     """
     if dataset_name in DATASET_CONFIG:
@@ -343,8 +343,8 @@ def load_rlds_dataset(
 
     dataset = dataset.traj_map(restructure, num_parallel_calls=10)
 
-    video_output_path = os.path.join(output_dir, "videos")
-    json_output_path = os.path.join(output_dir, "jsons")
+    video_output_path = os.path.join(output_dir, "video")
+    json_output_path = os.path.join(output_dir, "jsonl")
     os.makedirs(video_output_path, exist_ok=True)
     os.makedirs(json_output_path, exist_ok=True)
     # Process episodes and convert to DexData format
@@ -382,10 +382,10 @@ def load_rlds_dataset(
             for writer in video_writers.values():
                 writer.close()
 
-            # Save JSON file
-            json_save_relative_path = os.path.join(dataset_name, f"episode{str(episode_index)}.jsonl")
-            json_full_path = os.path.join(json_output_path, json_save_relative_path)
-            save_json_file(jsons_tmp, json_full_path)
+            # Save JSONL file
+            jsonl_save_relative_path = os.path.join(dataset_name, f"episode{str(episode_index)}.jsonl")
+            jsonl_full_path = os.path.join(json_output_path, jsonl_save_relative_path)
+            save_json_file(jsons_tmp, jsonl_full_path)
 
             processed_episodes += 1
             if verbose:
@@ -401,7 +401,7 @@ def load_rlds_dataset(
         print(f"\n=== Episode Processing Complete ===")
         print(f"Successfully processed {processed_episodes} episodes")
         print(f"Video files saved to: {video_output_path}")
-        print(f"JSON files saved to: {json_output_path}")
+        print(f"JSONL files saved to: {json_output_path}")
     else:
         print(f"\nProcessing complete! Successfully processed {processed_episodes} episodes.")
 
@@ -415,7 +415,7 @@ def parse_arguments():
         argparse.Namespace: Parsed command line arguments
     """
     parser = argparse.ArgumentParser(
-        description="Convert RLDS datasets to DexData format with video and JSON outputs.",
+        description="Convert RLDS datasets to DexData format with video and JSONL outputs.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
@@ -446,14 +446,14 @@ def parse_arguments():
         "--output_dir",
         type=str,
         default="./output",
-        help="Root directory for output files (videos and JSONs)"
+        help="Root directory for output files (video and JSONL)"
     )
 
     parser.add_argument(
         "--frame_rate",
         type=int,
         default=10,
-        help="Frame rate for output videos"
+        help="Frame rate for output video"
     )
 
     parser.add_argument(
