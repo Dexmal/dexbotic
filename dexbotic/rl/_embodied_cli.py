@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 
 import torch.multiprocessing as mp
 from omegaconf import OmegaConf
+
+logger = logging.getLogger(__name__)
 
 from rlinf.config import validate_cfg
 from rlinf.runners.embodied_runner import EmbodiedRunner
@@ -25,12 +28,10 @@ def run_embodied_rl(cfg) -> None:
 
     register_all()
 
-    print(
-        "[Dexbotic RL] Launching from Dexbotic entrypoint with RLinf as backend."
-    )
+    logger.info("[Dexbotic RL] Launching from Dexbotic entrypoint with RLinf as backend.")
 
     cfg = validate_cfg(cfg)
-    print(json.dumps(OmegaConf.to_container(cfg, resolve=True), indent=2))
+    logger.info(json.dumps(OmegaConf.to_container(cfg, resolve=True), indent=2))
 
     cluster = Cluster(
         cluster_cfg=cfg.cluster, distributed_log_dir=cfg.runner.per_worker_log_path

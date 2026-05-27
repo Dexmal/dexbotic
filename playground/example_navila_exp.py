@@ -6,10 +6,13 @@ python playground/example_navila_exp.py --task inference_single --image_path tes
 
 """
 import argparse
+import logging
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 from dexbotic.data.dataset.transform.common import Pipeline, ToDict, ToList, ToNumpy
 from dexbotic.data.dataset.transform.multimodal import LoadMultiModal
@@ -139,7 +142,7 @@ class Exp(NaVILAExp):
             with open(image_path, "rb") as f:
                 image_bytes = f.read()
         except FileNotFoundError:
-            print(f"Error: image file not found {image_path}")
+            logger.error("Error: image file not found %s", image_path)
             return None
 
         images_list = self.inference_config._prepare_images(image_bytes)
@@ -150,7 +153,7 @@ class Exp(NaVILAExp):
             text=prompt,
             images=images_list,
         )
-        print(f"Inference result: {result}")
+        logger.info("Inference result: %s", result)
         return result
 
 
