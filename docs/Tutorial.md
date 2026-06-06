@@ -92,9 +92,14 @@ cd dexbotic
 pip install -e .
 pip install transformers==4.57.6
 
-# Install FlashAttention
-pip install ninja packaging
-pip install flash-attn --no-build-isolation
+# FlashAttention kernels (e.g. cross-entropy used in RL training) are fetched
+# on demand from the Hugging Face Hub via the `kernels` library, which is
+# installed as a core dependency above. No local flash-attn build is required.
+#
+# Optionally, to use a locally compiled flash-attn (e.g. for the
+# `flash_attention_2` HF attention implementation), install it explicitly:
+# pip install ninja packaging
+# pip install flash-attn --no-build-isolation
 ```
 
 

@@ -23,6 +23,7 @@ dependencies = [
     # Core ML/AI dependencies
     "transformers>=4.57.6",
     "accelerate>=1.10.0",
+    "kernels",
     "deepspeed==0.19.1",
     "peft",
     "bitsandbytes",

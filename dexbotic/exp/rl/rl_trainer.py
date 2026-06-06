@@ -12,12 +12,28 @@ from dexbotic.exp.base_exp import TrainerConfig
 from dexbotic.exp.rl.rl_base import GRPOConfig, GRPOTrainer, RLEnvironmentConfig
 from dexbotic.exp.trainer import DexboticTrainer
 
-try:
-    from flash_attn.ops.triton.cross_entropy import cross_entropy_loss
+cross_entropy_loss = None
+FLASH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = False
 
-    FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = True
-except ImportError:
-    FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = False
+try:
+    # Preferred: pull the flash-attn Triton kernels from the Hugging Face Hub via
+    # `kernels`, instead of depending on a locally compiled `flash_attn` build.
+    # `pip install -U kernels` to enable this path.
+    from kernels import get_kernel
+
+    cross_entropy_loss = get_kernel(
+        "kernels-community/flash-attn-ops", version=1
+    ).cross_entropy_loss
+
+    FLASH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = True
+except Exception:
+    # Fallback: use a locally compiled `flash_attn` build if one is installed.
+    try:
+        from flash_attn.ops.triton.cross_entropy import cross_entropy_loss
+
+        FLASH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = True
+    except ImportError:
+        FLASH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = False
 
 
 def gather_from_labels(data, label):
@@ -26,7 +42,7 @@ def gather_from_labels(data, label):
 
 
 def logprobs_from_logits(logits, labels):
-    if FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE:
+    if FLASH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE:
         batch_dim = logits.shape[:-1]
         last_dim = logits.shape[-1]
         logits = logits.reshape(-1, last_dim)
