@@ -1,9 +1,12 @@
 from collections import deque
+import logging
 import requests
 import math
 
 import numpy as np
 import cv2
+
+logger = logging.getLogger(__name__)
 
 
 class DexClient:
@@ -86,4 +89,4 @@ if __name__ == "__main__":
         action = client.act(
             observation,
             "What action should the robot take to put both moka pots on the stove?")
-        print("Action taken:", action)
+        logger.info("Action taken: %s", action)
