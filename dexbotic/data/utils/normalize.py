@@ -105,8 +105,12 @@ class RunningStats:
                 self._num_quantile_bins + 1)
 
             # Redistribute the existing histogram counts to the new bins
+            old_bin_widths = np.diff(old_edges)
+            old_bin_centers = old_edges[:-1] + old_bin_widths / 2
+            old_bin_centers = np.clip(
+                old_bin_centers, new_edges[0], new_edges[-1])
             new_hist, _ = np.histogram(
-                old_edges[:-1], bins=new_edges, weights=self._histograms[i])
+                old_bin_centers, bins=new_edges, weights=self._histograms[i])
 
             self._histograms[i] = new_hist
             self._bin_edges[i] = new_edges
